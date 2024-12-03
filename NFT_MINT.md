@@ -1,9 +1,9 @@
 # NFT minting (quick+dirty as just testing)<br>
 
-There are 3 file based components to minting an NFT:
-- the ER721 contract itself
+There are 3 file based components to minting an NFT (2 of which have to be on the web):
+- the ER721 contract itself (not on the web)
 - the image file stored somewhere on the web (used Pinata website mostly anywhere works, even referencing WM logo direct from their website worked!)
-- a description json file, also has to be on the web somewhere (worked loading onto github, currently I'm using account on nft.storage costing $3, but probably pinata website free+works too)
+- a description json file (which contains the URL to the image file), also has to be on the web somewhere (worked loading onto github, currently I'm using account on nft.storage costing $3, but probably pinata website free+works too)
 
 ## Image file
 Start with the image file - Pinata was free, I uploaded file there, keeping size small.  But you can use anywhere that is online/URL to reference it<br>
