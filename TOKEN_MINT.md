@@ -7,7 +7,7 @@ This means you have already done the faucet/bridging/etc and are now on "W3 WMC 
 If not first check out the guide from Nico [MNTX on W3-WMC](https://github.com/nodebasewm/nodebasewm.github.io/blob/main/wmc/testnet-guide.md)<br>
 <br>
 If OK - Now minting - There are many ways to mint tokens - and this is just one:<br>
-- Start with https://remix.etereum.org<br>
+- Start with https://remix.ethereum.org<br>
   - On the top left side click on file explorer - then find and click on create new file<br>
   - It will open a blank file and put cursor down on left panel to name the blank file - call it YOURNAME.sol<br>
      - YOURNAME = anything you want
