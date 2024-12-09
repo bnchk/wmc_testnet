@@ -1,4 +1,4 @@
-# WMC - Incentivised Testnet
+# WMC - Testnets
 If we can break it together, now is the time!<br>
 <br>
 Any load on the chain helps - lets go team :muscle:
