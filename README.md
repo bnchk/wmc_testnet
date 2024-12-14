@@ -10,4 +10,4 @@ But heading down this path is a way to get code which can be used to automate st
 * [TOKEN MINT](./TOKEN_MINT.md) - Become meme 👑
 * [NFT MINT](./NFT_MINT.md) - Mint your own NFT series
 * [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) - Spam step 1
-* [AUTO_NFTS](./AUTO_NFTS.md) - Spam step 2
+* [AUTO_NFTS](./AUTO_NFTS.md) - Spam step 2 ->> better version from Tijn discord linked [here](https://discord.com/channels/739450842108919828/1072502970027081749/1317057465522720799)
