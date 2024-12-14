@@ -1,9 +1,7 @@
 # AUTOMATED NFT MINTING
-This is script I have used to mint towards 90k NFTs on testnet at this point - Spam Haus + Dolphin Pepe<br>
+This is gen2 much faster script I have used to mint - Spam Haus + Dolphin Pepe<br>
 
-It requires node.js, ethers and also nft.storage as per very loose instructions in [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) + below<br>
-
-Needs account at nft.storage (1G storage for think was $3 - was cheap).  Then get an API key from them for in code below.<br>
+It requires node.js, and ethers as per very loose instructions in [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) + below<br>
 
 ## Verify environment
 - make sure you can get responses for/have installed the following (recommend VM so can revert if something doesn't work):<br>
@@ -24,174 +22,157 @@ npm install nft.storage  # has the api calls for online storage of metadata file
 
 ## STEPS BEFOREHAND
 - manually mint your NFT as per [NFT_MINT](./NFT_MINT.md) so you can get contract number for in the script
-- in this example I swapped to NFT.STORAGE for the metadata to be stored - got an API key + insert that in the following script code
+- have the IPFS for the image to add into script below
 
 ## CREATE MINTING SCRIPT 
 - have already minted your NFT manually via Remix as per [NFT_MINT](./NFT_MINT.md)
 - check/change in the script code:
-   - change the private key for your wallet (hide secure details in .env file if it matters for you (not applicable for me))
-   - Your contract needs to be changed
-   - Change the NFT_NAME and NFT_DESC to match yours
-   - Change the IMAGE_URL to be your image
-   - Verify your ABI matches code below (should do if following previous step above to mint it)
-   - Insert your NFT.STORAGE api key into NFT_STORAGE_API_KEY variable
+   - change PRIVATE_KEY for your wallet (hide secure details in .env file if it matters for you (not applicable for me))
+   - change RECIPIENT_ADDR recipient address
+   - change CONTRACT_ADDRESS for your contract
+   - Change the BASE_METADATA to match yours:
+      - nft name
+      - nft description
+      - image url
 
 ```javascript
-//======================================================================
-// MASS MFT MINTER - Spam Haus
-//======================================================================
-
-// .env secrecy not used for this as disposable accounts but would be like this:
-//import * as dotenv from "dotenv";   
-//dotenv.config();
-//const RPC_URL = process.env.RPC_URL;
-//const PRIVATE_KEY = process.env.PRIVATE_KEY;
-//const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
-
 import { ethers } from "ethers";
 
-// VARIABLES - ACCOUNT
-const PRIVATE_KEY = "<<INSERT MINTING WALLET PRIVATE KEY>>";
-const RECIPIENT_ADDR = "<<RECIPIENT PUBLIC ADDR - I USED SAME AS MINTING BUT PROBABLY BETTER TO USE ANOTHER>>";
+// Configuration
+const PRIVATE_KEY = "INSERT_WALLET_PRIVATE_KEY_HERE";
+const RECIPIENT_ADDR = "0x195EeA26fcFd1C1f92E6b2d1e7121fD81cE3130F";
+const CONTRACT_ADDRESS = "0x68aa732cDAE845DC5DCBadC0cBaD9731B04e3C4e";
+const RPC_URL = "https://rpc-testnet-base.worldmobile.net";
+const NUM_NFTS = 10000000;
+const BATCH_SIZE = 100; // Number of concurrent transactions
+const GAS_PRICE_BOOST = 1.5; // Multiplier for gas price
 
+// Basic metadata that will be used for all NFTs
+const BASE_METADATA = {
+    name: "DOLPHPEPE",
+    description: "Dolphin Pepe",
+    image: "https://gateway.pinata.cloud/ipfs/QmakhvcWi4hftwTqeQBpwJqbvYQNT3sPEoUKZ1R54wEmoo",
+};
 
-// VARIABLES - NFT+MINT
-const NUM_NFTS = 100000;       // How many in total for looping
-const NFT_NAME = "Yum";        // Match to your NFT
-const NFT_DESC = "Spam Haus";  //Match to your NFT
-const CONTRACT_ADDRESS = "0xef2DC2D817a036734fd2973644f1cf3DF32642f6";    //Use your NFT contract address, this is my spam one
-const IMAGE_URL = "https://gateway.pinata.cloud/ipfs/QmRNWGgKesfBsdHkWJvn7FPS2FG9Era6pLAE5GRKW9qXi8";   // this is my spam image - replace with yours
-
-const RPC_URL = "https://rpc-testnet-base.worldmobile.net";  // L3 WMC RPC
-
-
-// BASIC CHECKS
-if (!RPC_URL || !PRIVATE_KEY || !CONTRACT_ADDRESS) {
-  console.error("Missing environment variables. Check your .env file/config.");
-  process.exit(1);
-}
-
-
-// DEFINE RPC + TEST
+// Setup provider and contract
 const provider = new ethers.JsonRpcProvider(RPC_URL);
-console.log("Provider connected");
-
-// TEST RPC CALL - can it find the tip
-(async () => {
-  try {
-    const blockNumber = await provider.getBlockNumber();
-    console.log(`Connected to blockchain. Current block number: ${blockNumber}`);
-  } catch (error) {
-    console.error("Failed to connect to the RPC provider:", error.message);
-	process.exit(1); 
-  }
-})();
-
-
-// TEST NFT CONTRACT EXISTS
-async function checkContractAddress(address) {
-  try {
-    const code = await provider.getCode(address);
-
-    if (code === "0x") {
-      console.log(`FAIL: Contract address ${address} is not a deployed contract.`);
-	  process.exit(1); 
-    } else {
-      console.log(`The address ${address} is a valid contract.`);
-    }
-  } catch (error) {
-    console.error(`Error checking the contract address:`, error);
-	process.exit(1); 
-  }
-}
-
-// Call the function with the contract address
-checkContractAddress(CONTRACT_ADDRESS);
-
-
-
-//======================================================================
-// DEFINE THE NFT - ABI should be ok if contract declared in same way as earlier guide
-//======================================================================
-
-
-const ABI = [
-	{
-		"inputs": [
-			{"internalType": "address","name": "recipient","type": "address"},
-			{"internalType": "string","name": "tokenURI","type": "string"}
-		],
-		"name": "mintNFT",
-		"outputs": [
-			{"internalType": "uint256","name": "","type": "uint256"}
-		],
-		"stateMutability": "nonpayable","type": "function"
-	}
-];
-
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+const ABI = [
+    {
+        "inputs": [
+            {"internalType": "address","name": "recipient","type": "address"},
+            {"internalType": "string","name": "tokenURI","type": "string"}
+        ],
+        "name": "mintNFT",
+        "outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+        "stateMutability": "nonpayable","type": "function"
+    }
+];
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, wallet);
 
-
-
-// Function - dynamically generate JSON metadata
-function generateMetadata(tokenId, nftName, nftDesc) {
-  return {
-    name: `${nftName} #${tokenId}`,
-    description: `${nftDesc} NFT #${tokenId}`,
-    image: IMAGE_URL,
-    attributes: [
-      {
-        trait_type: "Toking ID",
-        value: tokenId
-      }
-    ]
-  };
+// Nonce manager to handle concurrent transactions
+async function getNonceManager() {
+    const currentNonce = await wallet.getNonce();
+    let nextNonce = currentNonce;
+    return {
+        getNextNonce: () => nextNonce++
+    };
 }
 
-
-// Function - upload metadata to NFT.STORAGE (optional)
-import { NFTStorage, File } from "nft.storage";
-const NFT_STORAGE_API_KEY = "<<INSERT_NFT_STORAGE_API_KEY_HERE>>"
-
-
-async function uploadMetadataToNFTStorage(metadata) {
-  const client = new NFTStorage({ token: NFT_STORAGE_API_KEY });
-
-  // Store the metadata object directly
-  const metadataCID = await client.store({
-    name: metadata.name,
-    description: metadata.description,
-    image: IMAGE_URL, // Ensure this is a File or URL object
-    attributes: metadata.attributes,
-  });
-
-  console.log("Metadata successfully uploaded:", metadataCID.url);
-  return metadataCID.url; // Return the URL pointing to IPFS
+// Generate metadata URI directly without external storage
+function generateMetadataURI(tokenId) {
+    const metadata = {
+        ...BASE_METADATA,
+        name: `${BASE_METADATA.name} #${tokenId}`,
+        description: `${BASE_METADATA.description} NFT #${tokenId}`,
+        attributes: [{ trait_type: "Token ID", value: tokenId }]
+    };
+    return `data:application/json;base64,${Buffer.from(JSON.stringify(metadata)).toString("base64")}`;
 }
 
+async function speedMint() {
+    console.log("Starting high-speed minting process...");
+    const nonceManager = await getNonceManager();
 
-// Function - Mint the NFTs
-async function batchMint(recipient) {
-  for (let i = 1; i <= NUM_NFTS; i++) {
-    const metadata = generateMetadata(i, NFT_NAME, NFT_DESC);
-    console.log(`Generated metadata for token #${i}:`, metadata);
+    // Get and boost gas price
+    const gasPrice = await provider.getFeeData();
+    const boostedGasPrice = {
+        maxFeePerGas: gasPrice.maxFeePerGas * BigInt(Math.floor(GAS_PRICE_BOOST * 100)) / 100n,
+        maxPriorityFeePerGas: gasPrice.maxPriorityFeePerGas * BigInt(Math.floor(GAS_PRICE_BOOST * 100)) / 100n
+    };
 
-    // Optionally, upload metadata to NFT.STORAGE
-    const metadataURI = `data:application/json;base64,${Buffer.from(
-      JSON.stringify(metadata)
-    ).toString("base64")}`;
+    // Function to create and send a single mint transaction
+    async function sendMintTransaction(tokenId) {
+        const nonce = nonceManager.getNextNonce();
+        const metadataURI = generateMetadataURI(tokenId);
+        
+        const tx = await contract.mintNFT.populateTransaction(RECIPIENT_ADDR, metadataURI);
+        
+        const signedTx = await wallet.sendTransaction({
+            ...tx,
+            nonce,
+            ...boostedGasPrice,
+        });
 
-    console.log(`Minting token #${i} to ${recipient} with URI: ${metadataURI}`);
-    const tx = await contract.mintNFT(recipient, metadataURI);
-    console.log(`Transaction sent: ${tx.hash}`);
-    await tx.wait(); // Wait for confirmation
-    console.log(`Token #${i} minted successfully.`);
-  }
+        return {
+            tokenId,
+            hash: signedTx.hash,
+            wait: () => signedTx.wait()
+        };
+    }
+
+    // Process in batches
+    let processedCount = 0;
+    while (processedCount < NUM_NFTS) {
+        const batchSize = Math.min(BATCH_SIZE, NUM_NFTS - processedCount);
+        const batchPromises = [];
+
+        // Create batch of transactions
+        for (let i = 0; i < batchSize; i++) {
+            const tokenId = processedCount + i + 1;
+            batchPromises.push(sendMintTransaction(tokenId));
+        }
+
+        // Send batch concurrently
+        try {
+            const pendingTxs = await Promise.all(batchPromises);
+            
+            // Log transaction hashes immediately
+            pendingTxs.forEach(tx => {
+                console.log(`Minting #${tx.tokenId} - Transaction sent: ${tx.hash}`);
+            });
+
+            // Wait for confirmations in parallel
+            await Promise.all(pendingTxs.map(tx => tx.wait()));
+            processedCount += batchSize;
+            console.log(`Batch complete! Total minted: ${processedCount}/${NUM_NFTS}`);
+        } catch (error) {
+            console.error("Error in batch:", error);
+            // Continue with next batch even if current batch had errors
+        }
+    }
 }
 
-const recipientAddress = RECIPIENT_ADDR; // Replace with recipient address
-batchMint(recipientAddress).catch(console.error);
+// Initial RPC connection test
+async function testConnection() {
+    try {
+        const blockNumber = await provider.getBlockNumber();
+        console.log(`Connected to blockchain. Current block number: ${blockNumber}`);
+        
+        const code = await provider.getCode(CONTRACT_ADDRESS);
+        if (code === "0x") {
+            throw new Error("Contract not deployed");
+        }
+        console.log("Contract verified. Starting minting process...");
+        
+        await speedMint();
+    } catch (error) {
+        console.error("Setup error:", error);
+        process.exit(1);
+    }
+}
+
+testConnection();
 ```
 
 ## SAVE + RUN THE SCRIPT
