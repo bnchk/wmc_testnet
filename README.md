@@ -11,4 +11,5 @@ But heading down this path is a way to get code which can be used to automate st
 * [TOKEN MINT](./TOKEN_MINT.md) - Become meme 👑  ==>> Also another way from Dodo [here](https://discord.com/channels/739450842108919828/1072502970027081749/1313845801235124266)
 * [NFT MINT](./NFT_MINT.md) - Mint your own NFT series
 * [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) - Spam step 1 ==>> **vastly** more advanced version from catman discord [linked here](https://github.com/catman-1234/multi-wallet-block-fill/blob/main/test/spam.js)
-* [AUTO_NFTS](./AUTO_NFTS.md) - Spam step 2 ->> better version from Tijn discord should get linked [linked here](https://discord.com/channels/739450842108919828/1072502970027081749/1317057465522720799)
+* [AUTO_NFTS](./AUTO_NFTS.md) - V2 much faster now, thanks for suggestion to revise code Tjin
+* [GAS_LIMIT](./MAX_GAS_LIMIT.md) - what is max gas limit for a block?
