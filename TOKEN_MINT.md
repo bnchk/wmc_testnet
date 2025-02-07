@@ -62,3 +62,18 @@ After editing the solidity contract file above to suit, and changing the 3 keywo
    - they are now visible in your wallet 
 
 Have fun and let me know if guide worked, or any issues!
+
+### ADDENDUM Round2 L3 Base testnet - Register Contract on chain (optional)
+- rclick on the Remix File explorer/file name and select "flatten"
+  - this will import all contracts referenced
+  - make bigger file with _flattened.sol name
+- Copy the first line of the original contract file (the licence line)
+- replace that licence line over first (blank) line of flattened file + cntl-s
+- Select all the code of flattened file - cntl-a/c
+- find your deployed ERC20 contract under blockscout explorer 
+- click on "contract", then on "verify and publish" to open verify page
+  - select the licence you used (MIT for me), compiler type solidity single, compiler version used (probably the most recent in list - what you compliled using)
+  - EVM version for me was cancun
+  - Uncheck Optimisation
+  - Paste in the flattened code from clipboard
+  - Click Verify and Publish
