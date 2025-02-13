@@ -1,36 +1,17 @@
 # AUTOMATED NFT MINTING
-This is gen2 much faster script I have used to mint - Spam Haus + Dolphin Pepe<br>
-
-It requires node.js, and ethers as per very loose instructions in [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) + below<br>
-
-## Verify environment
-- make sure you can get responses for/have installed the following (recommend VM so can revert if something doesn't work):<br>
-```bash
-node -v  #and get a version number back
-npm -v   #and get a version number back
-
-#then I dropped back a version of node.js
-nvm install 20
-nvm use 20  #using older version for better compatibility apparenty
-
-npm install ethers       # has the commands we need to use
-npm install nft.storage  # has the api calls for online storage of metadata files at this provider (nft.storage)
-
-#then in the folder in installed in edit packages.json and add this line in the top half
-"type": "module"
-```
+This is gen3 script - bulk mints in batches with auto nonce and gas - much more evolved than earlier Spam Haus + Dolphin Pepe examples<br>
 
 ## STEPS BEFOREHAND
 - manually mint your NFT as per [NFT_MINT](./NFT_MINT.md) so you can get contract number for in the script
-- have the IPFS for the image to add into script below
+- have IPFS image URL for the image to add into script below (free with pinata takes minutes)
+- setup automation environment as per [ENV_SETUP](./README.md#automation-environment-setup-steps)
 
 ## CREATE MINTING SCRIPT 
-- have already minted your NFT manually via Remix as per [NFT_MINT](./NFT_MINT.md)
-- check/change in the script code:
+- update the following in the script code:
    - change PRIVATE_KEY for your wallet (hide secure details in .env file if it matters for you (not applicable for me))
    - change RECIPIENT_ADDR recipient address
    - change CONTRACT_ADDRESS for your contract
-   - Change the BASE_METADATA to match yours:
+   - Change the BASE_METADATA to match your NFT:
       - nft name
       - nft description
       - image url
@@ -39,19 +20,19 @@ npm install nft.storage  # has the api calls for online storage of metadata file
 import { ethers } from "ethers";
 
 // Configuration
-const PRIVATE_KEY = "INSERT_WALLET_PRIVATE_KEY_HERE";
-const RECIPIENT_ADDR = "0x195EeA26fcFd1C1f92E6b2d1e7121fD81cE3130F";
-const CONTRACT_ADDRESS = "0x68aa732cDAE845DC5DCBadC0cBaD9731B04e3C4e";
+const PRIVATE_KEY = "<<< INSERT YOUR PRIVATE KEY HERE >>>>>>";
+const RECIPIENT_ADDR = "<<< recipient addresss 0x >>>>>>";
+const CONTRACT_ADDRESS = "0xAd8bd71EEc1539508DcA829129D97e0112708e99";
 const RPC_URL = "https://rpc-testnet-base.worldmobile.net";
-const NUM_NFTS = 10000000;
+const NUM_NFTS = 10000;
 const BATCH_SIZE = 100; // Number of concurrent transactions
 const GAS_PRICE_BOOST = 1.5; // Multiplier for gas price
 
-// Basic metadata that will be used for all NFTs
+// Basic metadata that will be used for all NFTs - UPDATE YOURS HERE
 const BASE_METADATA = {
-    name: "DOLPHPEPE",
-    description: "Dolphin Pepe",
-    image: "https://gateway.pinata.cloud/ipfs/QmakhvcWi4hftwTqeQBpwJqbvYQNT3sPEoUKZ1R54wEmoo",
+    name: "Yum",
+    description: "Spam Haus",
+    image: "https://gateway.pinata.cloud/ipfs/QmRNWGgKesfBsdHkWJvn7FPS2FG9Era6pLAE5GRKW9qXi8",
 };
 
 // Setup provider and contract
@@ -179,6 +160,4 @@ testConnection();
 - save the above file with name like spamnft.js
 - run it as follows:
    - ```node spamnft.js```
-- Hopefully you now have automated ERC-721 NFT minting!<br>
-- Definitely there are ways to do this in bulk much more neatly, but leaving that for another day - for now this focus is overloading testnet.<br>
-- Any corrections/feedback are most welcome, as I am learning as I go!
+- Hopefully you now have automated batching of ERC-721 NFT minting!<br>
