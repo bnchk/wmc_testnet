@@ -14,7 +14,7 @@ But heading down this path is a way to get code which can be used to automate st
 * [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS2.md) - V2 including auto gas calculations
 * [AUTO_NFTS](./AUTO_NFTS.md) - V3 autogas, autononce, batches of 100 at a time
 * [AUTO_MINT_BURN](./AUTO_MINT_BURN.md) - sequentially mint and burn tokens 
-* [AUTO_ERC20_TO_ALL_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - sequentially mint and burn tokens 
+* [AUTO_ERC20_TO_ALL_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to addresses with gas as at ~8th Feb 2025 
 <br>
 
 ## Automation Environment Setup steps
