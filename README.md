@@ -14,3 +14,46 @@ But heading down this path is a way to get code which can be used to automate st
 * [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS.md) - Spam step 1 ==>> **vastly** more advanced version from catman discord [linked here](https://github.com/catman-1234/multi-wallet-block-fill/blob/main/test/spam.js)
 * [AUTO_NFTS](./AUTO_NFTS.md) - V2 much faster now, thanks for suggestion to revise code Tjin
 * [AUTO_MINT_BURN](./AUTO_MINT_BURN.md) - sequentially mint and burn tokens 
+<br>
+
+## Automation Environment Setup steps
+This is what worked for me, but there are likely better ways:
+* From home directory of user who will run scripts, install node version manager (recommended standard access user):
+  ```bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  ```
+* Reload environment variables - either close/open terminal or:
+  * ```bash
+    source ~/.bashrc
+    ```
+* Install the node version required - in this case v20 sounded good:
+  * ```bash
+    nvm install 20
+    ```
+* Should return:  20.18.3
+  * ```bash
+    node -v
+    ```
+* Should return:   10.8.2
+  * ```bash
+    npm -v
+    ```
+* Setup Project folder
+  * Create folder you are storing scripts in and change there eg:
+    * ```bash
+      mkdir $HOME/wmctest && cd $HOME/wmctest
+      ```
+  * Initialise the package manager and set to module type:
+    * ```bash
+      npm init -y
+      ```
+  * Set module type:
+    * ```bash
+      npm pkg set type="module"
+      ```
+  * Install ethers:
+    * ```bash
+      npm install ethers
+      ```
+<br>
+
