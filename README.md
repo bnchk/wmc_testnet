@@ -17,8 +17,9 @@ But heading down this path is a way to get code which can be used to automate st
 <br>
 
 ## Automation Environment Setup steps
-This is what worked for me, but there are likely better ways:
-* From home directory of user who will run scripts, install node version manager (recommended standard access user):
+This is tested on Ubuntu 22.04 desktop, but should work on server.<br>
+Would recommend running in VM and taking snapshots just in case you wanted to revert/found issues:<br>
+* From home directory of user who will run scripts, install node version manager (recommended standard access user not superuser):
   ```bash
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
   ```
