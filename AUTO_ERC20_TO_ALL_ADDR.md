@@ -5,6 +5,7 @@ Needs:
 * ERC20 contract already created as per [here](https://github.com/bnchk/wmc_testnet/blob/main/TOKEN_MINT.md)<br>
 * environment setup as per [here](https://github.com/bnchk/wmc_testnet/tree/main#automation-environment-setup-steps)
 <br>
+
 Steps:
 * insert private key and contract in script below
 * edit how units to send in AMOUNT - this is 100
