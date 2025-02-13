@@ -12,7 +12,7 @@ But heading down this path is a way to get code which can be used to automate st
 * [NFT MINT](./NFT_MINT.md) - Mint your own NFT series
 * [GAS_LIMIT](./MAX_GAS_LIMIT.md) - what is max gas limit for a block?
 * [AUTO_TRANSACTIONS](./AUTO_TRANSACTIONS2.md) - V2 including auto gas calculations
-* [AUTO_NFTS](./AUTO_NFTS.md) - V2 much faster now, thanks for suggestion to revise code Tjin
+* [AUTO_NFTS](./AUTO_NFTS.md) - V3 autogas, autononce, batches of 100 at a time
 * [AUTO_MINT_BURN](./AUTO_MINT_BURN.md) - sequentially mint and burn tokens 
 <br>
 
