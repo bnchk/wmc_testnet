@@ -1,34 +1,44 @@
 # AUTOMATED TRANSFERS TO RANDOM ADDRESSES
-This script generates random addresses and loops sending ERC20 token to them.<br>
+V2 of script to generates completely random addresses and loop sending ERC20 token to them.<br>
 
-Environment build is same as any of the other AUTO* jobs.<br>
+## STEPS BEFOREHAND
+- manually mint your ERC20 token as per [TOKEN_MINT](./TOKEN_MINT.md) so you can get contract number for in the script
+- setup automation environment as per [ENV_SETUP](./README.md#automation-environment-setup-steps)
+
+## POPULATE VARIABLES IN SCRIPT 
+- update the following in the script code:
+   - change PRIVATE_KEY for your wallet (hide secure details in .env file if it matters for you (not applicable for me))
+   - change CONTRACT_ADDRESS for your contract
+   - change BATCH_DELAY_MS to minimise pending
+
+## HOW TO RUN
+- tested with node v20
+- run by `node scriptname.js`
 <br>
 
 ```javascript
-// OPTIMIZED BULK TOKEN SENDER
+// OPTIMIZED BULK TOKEN SENDER with delay between batches variable
 import { ethers } from "ethers";
 import crypto from "crypto";
-
 const RPC_URL = "https://rpc-testnet-base.worldmobile.net";
-const TOKEN_CONTRACT_ADDRESS = "0x8dEE6e58B7278fBAAd457c6D627Ecd0729109D98";
+const TOKEN_CONTRACT_ADDRESS = "INSERT-TOKEN-CONTRACT-HERE";
 const TOKEN_ABI = [
     "function transfer(address to, uint256 amount) public returns (bool)",
 ];
-const PRIVATE_KEY = "6e111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const PRIVATE_KEY = "INSERT-PRIVATE-KEY-HERE";
 const AMOUNT = ethers.parseUnits("10", 18);
 const BATCH_SIZE = 10; // Reduced batch size for better stability
-const TOTAL_TRANSACTIONS = 10000000;
+const TOTAL_TRANSACTIONS = 100000;
+const BATCH_DELAY_MS = 2000; // Delay between batches in milliseconds
 
-// Provider with more conservative settings
+// Provider
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, wallet);
-
 function generateRandomAddress() {
     const randomBytes = crypto.randomBytes(20);
     return ethers.getAddress("0x" + randomBytes.toString("hex"));
 }
-
 async function sendBatch(startNonce, count) {
     const txPromises = [];
     
@@ -52,7 +62,6 @@ async function sendBatch(startNonce, count) {
     
     return Promise.all(txPromises);
 }
-
 async function sendTokens() {
     let currentNonce = await provider.getTransactionCount(wallet.address, "latest");
     console.log(`Starting nonce: ${currentNonce}`);
@@ -74,7 +83,7 @@ async function sendTokens() {
             console.log(`Progress: ${processedTx}/${TOTAL_TRANSACTIONS} transactions processed`);
             
             // Small delay between batches to allow the node to catch up
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise(resolve => setTimeout(resolve, BATCH_DELAY_MS));
         } catch (err) {
             console.error("Batch error:", err);
             // If we encounter an error, fetch the current nonce again to resync
@@ -85,7 +94,6 @@ async function sendTokens() {
     
     console.log(`Process completed. ${processedTx} transactions processed.`);
 }
-
 // Error handling wrapper
 (async () => {
     try {
@@ -93,5 +101,4 @@ async function sendTokens() {
     } catch (err) {
         console.error("Fatal error during token sending:", err);
     }
-})();
-```
+})();```
