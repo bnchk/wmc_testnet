@@ -16,6 +16,8 @@ But heading down this path is a way to get code which can be used to automate st
 * [AUTO_MINT_BURN](./AUTO_MINT_BURN.md) - sequentially mint and burn tokens 
 * [AUTO_ERC20_TO_RANDOM_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to fabricated addresses
 * [AUTO_ERC20_TO_ALL_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to addresses with gas as at ~8th Feb 2025 
+* [AUTO_GASBURN_SPACE](./AUTO_GASBURN_SPACE.md) - stress chain with space intensive contract 
+* [AUTO_GASBURN_MIXED](./AUTO_GASBURN_MIXED.md) - stress chain with mixed compute/space
 <br>
 
 ## Automation Environment Setup steps
