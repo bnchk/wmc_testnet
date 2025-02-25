@@ -99,7 +99,7 @@ contract GasBurnViaSpace {
 ```
 <br>
 
-## JAVASCRIPT TO RUN JOB
+## RUN LOADING JOB
 This script will call the contract.  Replace the parameters to suit:
 * private wallet key
 * contract from the above
@@ -460,7 +460,7 @@ main().catch(console.error);
 ```
 <br>
 
-## JAVASCRIPT TO FETCH FUNDS BACK
+## FETCH FUNDS BACK
 * If you don't do this after each run, the config in `generated-wallets.json` will be lost and your transferred funds as well
 * Insert private key into code, and run.
 
@@ -474,7 +474,7 @@ const fs = require('fs');
 // Configuration
 const RPC_URL = "https://rpc-testnet-base.worldmobile.net";
 const MAIN_WALLET_PRIVATE_KEY = "INSERT_PRIVATE_KET_HERE"; // Your main wallet private key
-const GAS_BUFFER_ETH = "0.00001"; // ETH to leave for gas (adjust based on network fees)
+const GAS_BUFFER_WMTX = "0.00001"; // WMTX to leave for gas (adjust based on network fees)
 const WALLET_FILE_PATH = './generated-wallets.json';
 
 async function main() {
@@ -491,7 +491,7 @@ async function main() {
   
   // Get main wallet balance
   const mainBalanceBefore = await provider.getBalance(mainWallet.address);
-  console.log(`Main wallet starting balance: ${ethers.formatEther(mainBalanceBefore)} ETH`);
+  console.log(`Main wallet starting balance: ${ethers.formatEther(mainBalanceBefore)} WMTX`);
   
   // Load wallet data from file
   let walletData;
@@ -520,7 +520,7 @@ async function main() {
   // Process each funded wallet
   let totalRecovered = BigInt(0);
   let recoveredWallets = 0;
-  const gasBuffer = ethers.parseEther(GAS_BUFFER_ETH);
+  const gasBuffer = ethers.parseEther(GAS_BUFFER_WMTX);
   
   for (const wallet of fundedWallets) {
     try {
@@ -528,15 +528,15 @@ async function main() {
       const balance = await provider.getBalance(wallet.address);
       
       if (balance <= gasBuffer) {
-        console.log(`Skipping wallet ${wallet.address} - insufficient balance (${ethers.formatEther(balance)} ETH)`);
+        console.log(`Skipping wallet ${wallet.address} - insufficient balance (${ethers.formatEther(balance)} WMTX)`);
         continue;
       }
       
-      console.log(`Processing wallet ${wallet.address} with balance: ${ethers.formatEther(balance)} ETH`);
+      console.log(`Processing wallet ${wallet.address} with balance: ${ethers.formatEther(balance)} WMTX`);
       
       // Calculate amount to send (leave some for gas)
       const gasPrice = await provider.getFeeData();
-      const gasLimit = BigInt(21000); // Standard ETH transfer
+      const gasLimit = BigInt(21000); // Standard WMTX transfer
       let gasCost;
       
       if (gasPrice.maxFeePerGas) {
@@ -556,7 +556,7 @@ async function main() {
         continue;
       }
       
-      console.log(`  Recovering ${ethers.formatEther(amountToSend)} ETH`);
+      console.log(`  Recovering ${ethers.formatEther(amountToSend)} WMTX`);
       
       // Send funds back to main wallet
       const tx = await wallet.sendTransaction({
@@ -582,10 +582,10 @@ async function main() {
   console.log("\n--- RECOVERY SUMMARY ---");
   console.log(`Wallets processed: ${fundedWallets.length}`);
   console.log(`Wallets with funds recovered: ${recoveredWallets}`);
-  console.log(`Total ETH recovered: ${ethers.formatEther(totalRecovered)} ETH`);
-  console.log(`Main wallet starting balance: ${ethers.formatEther(mainBalanceBefore)} ETH`);
-  console.log(`Main wallet ending balance: ${ethers.formatEther(mainBalanceAfter)} ETH`);
-  console.log(`Net change: ${ethers.formatEther(mainBalanceAfter - mainBalanceBefore)} ETH`);
+  console.log(`Total WMTX recovered: ${ethers.formatEther(totalRecovered)} WMTX`);
+  console.log(`Main wallet starting balance: ${ethers.formatEther(mainBalanceBefore)} WMTX`);
+  console.log(`Main wallet ending balance: ${ethers.formatEther(mainBalanceAfter)} WMTX`);
+  console.log(`Net change: ${ethers.formatEther(mainBalanceAfter - mainBalanceBefore)} WMTX`);
 }
 
 main().catch(console.error);
