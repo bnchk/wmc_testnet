@@ -48,6 +48,7 @@ After editing the solidity contract file above to suit, and changing the 3 keywo
 - next click "Deploy and Run" on the left under compiler
 - Go to your Metamask wallet and make sure you have selected the W3 WMC chain
 - Go to the environment selection on middle panel + select "Injected Provider - Metamask" or your wallet
+- In the Account box, if correct Metamask account not selected choose it<br>
 - Find the Orange Deploy button and the empty field to it's right
 - In this field to the right you enter your total number of tokens to mint followed by 18 (yes!) zeros
   - so for 100k tokens enter: 100000000000000000000000
@@ -63,7 +64,7 @@ After editing the solidity contract file above to suit, and changing the 3 keywo
 
 Have fun and let me know if guide worked, or any issues!
 
-### ADDENDUM Round2 L3 Base testnet - Register Contract on chain (optional)
+### REGISTER CONTRACT ON CHAIN (optional)
 - rclick on the Remix File explorer/file name and select "flatten"
   - this will import all contracts referenced
   - make bigger file with _flattened.sol name
