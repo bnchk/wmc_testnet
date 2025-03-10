@@ -1,0 +1,320 @@
+# SEND ERC20 TO ALL ADDRESSES
+This will send ERC20 token to add addresses with positive gas balance as at ~2025-02-08
+
+Needs:
+* ERC20 contract already created as per [here](https://github.com/bnchk/wmc_testnet/blob/main/TOKEN_MINT.md)<br>
+* environment setup as per [here](https://github.com/bnchk/wmc_testnet/tree/main#automation-environment-setup-steps)
+<br>
+
+Steps:
+* insert private key and contract in script below
+* edit how units to send in AMOUNT - this is 100
+* run via:  `node scriptname.js`
+
+```javascript
+// v6 - sending Round2 DINGDING out of wallet 4 to list of all addresses with gas
+import { ethers } from "ethers";
+
+// Configurations
+const RPC_URL = "https://rpc-testnet-base.worldmobile.net"; // Replace with your RPC URL
+const TOKEN_CONTRACT_ADDRESS = ">>>> INSERT CONTRACT ADDRESS <<<<"; // Token contract
+const TOKEN_ABI = [
+    "function transfer(address to, uint256 amount) public returns (bool)",
+];
+const PRIVATE_KEY = ">>>> INSERT PRIVATE KEY <<<<"; // Wallet private key #4
+const AMOUNT = ethers.parseUnits("100", 18); // Adjust decimals as needed
+const BATCH_SIZE = 25; // Number of transactions per batch
+
+// List of recipient addresses
+const RECIPIENT_LIST = [
+        "0xb5C4f48D13D0824936250eb143E3073986600fFA",
+        "0x297bF464Ff45324D9e9bbDb2e5C59411e5f085bC",
+        "0x4200000000000000000000000000000000000016",
+        "0x37D1812Fa16591089773D2c46D11631d74077D25",
+        "0x816b00B15e952890d670a915E92D3783B39ed24B",
+        "0xA65B3073a42d403953796e7a442992cf8c991773",
+        "0x4812576622Ab2D52EFE060b5eCD0FF595387EEef",
+        "0xDBAC63432741cb76BBeCFB04A7297CE145F5F6d9",
+        "0xa8e21A413D058D4aE4457e34F92b93A438B4118C",
+        "0x4965097fCbeF75D7b5Cd259bA7141052DC9b00d9",
+        "0x32C4f45898F7da40cEDC3323c03A6F4c3D1809Bb",
+        "0x0608190b041c1f7a5FEF9fb7D6295BF5D9151856",
+        "0x0e06d110ffFC329C64e7EBFa6dd74dfb2302a77F",
+        "0x1b2EF8793b1F7Aba4BB321688A16414C3951CC14",
+        "0x23Dd0007d28580eAbf6585183a01e9fdD5759A31",
+        "0x3b15C9e60D04EE627568960f8d78797382a9269E",
+        "0xa958591CD15CA186dc8FcA83FB9A816159B08AfC",
+        "0xCf47fbB2D6c95f2066AaDb6993970f0Cfe1dA29c",
+        "0x0DA7A3660A2a4FeA1CA81017A75d2d03B137a63A",
+        "0xb41076C4Fc482CaA02c1f4Dde1d8d8C07D0072d5",
+        "0x742e932f9B55aAC1C72408960A9B2d787e25Ee61",
+        "0x195EeA26fcFd1C1f92E6b2d1e7121fD81cE3130F",
+        "0x1f9eb427561645f8c9F174A877A66AE8Ed86cBcf",
+        "0x804e4198F1b53eB572A31233c8cEED6E90ED0B77",
+        "0x9baE036C830B230cfc0Ac4CbfcAFab9c6286229e",
+        "0xD7dCefC0f6bfd059f5f04f67751124AeF1ab069b",
+        "0x0Ae12fc5d48f3D1b5DD4Bac7cD53526Cc9248Bca",
+        "0x7dAfA7A41E2650AE5512493C6414Be35C16F064D",
+        "0x884Ee9CD8a94d4067B8aeA227Ee8CD04A37b7Dc7",
+        "0x268f4E01A0024a79adDe6257C565443E06F9EAaC",
+        "0xcb069c0d7E04a38A8FE6d81B68f815A14eE209de",
+        "0x4D2D3222BCcA46992060Ba65c4496720f90691F4",
+        "0x7647D7De45353616aa7797Cb4271d435C484DD95",
+        "0x0DAEDa3c3736f3c2243C9Ff561e1B89a94d8a768",
+        "0x5f023680093a25ADc5B6705271122956125F3358",
+        "0x6d02A5ED9cA85F67A6F6dc9e020431Da90E5EdAf",
+        "0x70069726D821Fe510E748aB0bCCB5b3D985EC2d9",
+        "0x8Bd9A6FA213dc61cD83458A14D27bB5B7D2206Ef",
+        "0xA4bB450D87Af330Feb9e41ADdA7352De82d3cb41",
+        "0xB337c4a0c582D782c2De5b8b1fDF7880c6d8eA03",
+        "0xE2fEff578C08A9fb6E75CE898e858B2b7D58b3FC",
+        "0xF3FF87C6975c1D6f3Fd0f7729Bd65B2275479B4C",
+        "0xFFC5AFf87Ac70fDa756c3503E565B3d8a141a3D3",
+        "0x1485458876D672fe0C8364Bd6bc10DDc1945C836",
+        "0x43187235Ff87eB1747010bd60229115B775b874d",
+        "0x148b827258f18aCE10745136E664518c77bD08b5",
+        "0xAB0EC712B8b7A9B12b659167Aa4b91E1041118E4",
+        "0x503A23Fd244f81509bF7994ED8aD96d709b89c94",
+        "0xa1675D959Ee9362eCce00F3Ec53b55BE7260b860",
+        "0x6b36b140C7823733965D91b20F51919e869717C4",
+        "0x62f80637Dc3Bed32699E984E9772F9243B93B849",
+        "0xba570bC520180768952175f6214BB3eaF75cEF61",
+        "0x2c773b9e1A81360f3D532103bFF237658256020b",
+        "0x8B0a32360b22df2191078D396DB136f964c2914b",
+        "0x0922B44805CB5D90F35F3b9781aFf83b47D722d3",
+        "0x0A278898cFe1326A514a723944408cCc1e372c60",
+        "0x0A65C215CE8abC782A4B763FFfA10a41652Ac42C",
+        "0x108A40fC6A39b5bd62404D95cAB11568d80c4f11",
+        "0x1Eca92a3517DF8aC9c68aD649901F8C8D188EDee",
+        "0x2864be4B616BCde06a635776DfB4CCcA3D2a0Ed0",
+        "0x288A4e70Eba5d4f92e28F8CCc561E9fC947304A1",
+        "0x28F625d061a8D2786D05Ad4aD5C570C0F10AC80C",
+        "0x2bE760d753d8c4813EC9319Aa7A86C926Cd346C3",
+        "0x342E0Fa75F2323b1fd61d4C1ed8b153dE6aEa202",
+        "0x39c31A899662Da8BBA43862c82C8bA531Dc61390",
+        "0x51E5718fAd34Bb5b60C6A199c972488BD754a81e",
+        "0x691b87817017d7Ba13957901FCfC2A3BEC0cc6f5",
+        "0x7300c18F0E5c9120903A548C09E8ff08f0D4bb86",
+        "0x877A41dFC906A87825e44e516750358754b488a5",
+        "0x8e3119FB34B0652a9A3EBD0059Fd4B516fc4AB22",
+        "0x8EbDcbfE9A20be90E8302F48cD3395c1A78Fa2E5",
+        "0x8f3cE96c1c69b6274Ed7F7b9152a19Be7Bcf9940",
+        "0x94B253Ba61aeefBA90333b39369D8e7122C7e553",
+        "0x97a1CA841B4792068932D4224681f6F6fa22C549",
+        "0x9aFFEbf29369930bAe5B1DBAea8925EDE9Ed1411",
+        "0xa29e6a01bA96A94d71F624Aea2531F3EdB3FaF03",
+        "0xa2b4c41451943E4Aa8d668eb4643e587acE61209",
+        "0xa34cF0CE061627685036766C5A9f96A8946EFa76",
+        "0xA50A4002eCb418a6f7F05ACEF2704BeABf9E5ed6",
+        "0xa9Ed4c8e830a635af0766452F01176b564578Bb3",
+        "0xbA86E23E64828781A43b71647cC2D2a32BfE8890",
+        "0xC3E49fD89d51Bcc6AC8Cc41b001A76a0999e8187",
+        "0xc40d2c45156f57fcdCec7C5787e654228259B7cc",
+        "0xC852D1aDad3795AbA3F6605Acb8F20c25d5a7382",
+        "0xD66913DA9ce70cd009BEF711C2081CDeeF5ea26f",
+        "0xD88074d248Ecfe66012ef95793E040D8de7Cc59b",
+        "0xdBa2F5C4A442049BEF73e4A72192bC23Ad81551F",
+        "0xC5EAE0735c1F34B894A518329239Ee6B9d500122",
+        "0x46DD290A71146f23c4891e644B85B1bD78370f4B",
+        "0x025618C5AD746EAEe66E42489d33eC91F941e598",
+        "0x75fd78440F71baAF74fa215A1c8b18d625259B53",
+        "0x798a9737E591a992d7D36460711704426a01FA8c",
+        "0x83d0373B3cBB62A5Dead7f066716d0B58c8f0FDe",
+        "0x9A84e74afDAd8a8187CED381cfF30b4A6f85a178",
+        "0xbB63203FA253B667F1d8D591954F5a14ba5613E2",
+        "0x283bc7af2A631ba2930eD33f3c6006df5f05e9f6",
+        "0x937519163dc6263E74E0Cc02605fFEF1eDCA474D",
+        "0x1F90B765f1579541bf0aa539116c0aa2844606C3",
+        "0x495bdEA61864BaFbBd897CeBd8B70AbaD68A3ef4",
+        "0x4d44c1C1A41499aB0d62879748b1972c09Ff74f1",
+        "0x4f1d2fa62699Ca094ef1F31Da9FCAbA2AfFD40Dc",
+        "0xc2ce378434bF3500e5CF894F7eC57Be6C8AA1466",
+        "0xc81779Fa1FcE80B17BC1A1e95555A75B1d1609E6",
+        "0x64FbbA30fE50aFd4099aE09559c4094f4d50273C",
+        "0x3Cc59BB1d1882bAe58dDA662C0802B0e1E65c8c9",
+        "0x861539329843F4d878990522F4c380F330230117",
+        "0x1a69fB097773bca569d91c0A547c106E49cDcaf1",
+        "0x95F8D55d8F69389E9bDAF55e3c17997A25DeD820",
+        "0x25E4C97905c4c0709683C3E6a624eCfb991C7852",
+        "0x726B7882E99cF99f06949311D44cd818b617Db8F",
+        "0x109eEF9ea016F9D64aB1D7Ee17112E0d520a7a68",
+        "0x20db42341997fbD2F93f69Ff0f9a6317eE7123ea",
+        "0x3F5AEaD57Ee7bad93423EaA13047Df64E397df2d",
+        "0x607BE74F7c2D3C20aF1B58b86e2c5087dFA10f02",
+        "0x60fb3542F512D98Ff9C7514120cBC9faF6b29fe2",
+        "0xAb17A4d36CF851B66A52f47eAed028642D4aE6Bf",
+        "0xB7A23639E24be3De9B9aA5fb2334c7A532fb5ed2",
+        "0xEFB5B6F98C801f0CC75870d7D1930075e7DfeBB1",
+        "0xf6435D0c2EF5d133e04018EFae6d4d1e196312d5",
+        "0x256Bd1bF5ef35e07F4affFf1A0881d73A5C81eec",
+        "0x0d0EB29dA4e04423B99BCA314e8666A16eD7abe3",
+        "0xFc5678283F4D69C2bcA4B7d2bF1E5657476b956c",
+        "0x7F20788EAd4d53b79Ee199d03207e546C433CDed",
+        "0x54D88aF73D17D0686c32f04e3463BDbC22Da061b",
+        "0x556A96b3232912a48112B38A5329d9bE553aCC1B",
+        "0x5B2d319a0D1fa2aF9d1e3a788632722861c36a44",
+        "0x93F6B3176B05f9e540F127C5c8655c9Bc85416b1",
+        "0xeD11CF8118d99A1b46686Ba17F5B25EC8080F493",
+        "0xA609C663120D10A1E5504f80E7558D6212c5f6F3",
+        "0x1a8f3Dedf7cC58DFF031eA81f944b62828cE07FF",
+        "0x0a3F87835990206A19762bCE2F2afb29b5d6bB20",
+        "0x126beA9E6AbE720be9104bF9dd34Fb456fBE84Dc",
+        "0x47028e502BF99aD74E45bADF35c7F10D816B3bC6",
+        "0x47AA92f6382105A843b4817d99658f6075B70899",
+        "0x492b30e7B576aC749F2A398BC31F08d8436Ba504",
+        "0x51e2d61bb29bD800042F664B7F3619E4E279Ae9d",
+        "0x680a65a954b39dF23C94d086611a6ed1fb837ae9",
+        "0x6bBBa51c055dc0824a468b5f21a9b86dc3ECb38b",
+        "0x8b6547eC9e33622c6e3b069d74935Ea07aae8920",
+        "0x8de533BBbf570ad77C9581A4c2652194eeB7701e",
+        "0x8E8b72953509947dB86Ae600fe7c5E32E69E5fE5",
+        "0x9C952fc22AD42A56A7399fEB9879b0E696099798",
+        "0xA3CF16F8626fA7a4320A38281BD64205F2BE788E",
+        "0xA66b79Da18987D08af256fa68A61da0053FAbeB0",
+        "0xb1a4Fe6BDa8095B063a0Ac354cE518e1fb292E19",
+        "0xb6DAf15DcbDB1afcdDF58B8314E9DD180aefbf56",
+        "0xc764E7b6557A27C9548317228301E66C79933f04",
+        "0xc85F48094030E1A94CE7d69Ed198Df61aAda6282",
+        "0xcBc5d51040A57806222cAcfC78a9661244dFaAA1",
+        "0xD0428711bf3A7125282927A143F1ff55BCaC5482",
+        "0xdE402814Fb5bC25640b5Bf356B6F4d3B5129B4FB",
+        "0xeFb3d2640d0934B2aFf409Da5861C931c468bab0",
+        "0xF8A78Dd4F1F8a4Dc4aa9d096643808fce468C279",
+        "0xfF90128F1Ea524692fa87b1fc721C6EDdd87d78d",
+        "0x55431E1DeFfbC176FC4f97202773De1ad8ab017b",
+        "0x0d7D6281E13999f16f7B03d9B6e9E9E72573B4ad",
+        "0xE21C12B124B4fB097C9401c9bddcD465dDAc40b1",
+        "0x56df411D91B40e903dfF3b9F8978aF9C51668e05",
+        "0x647ad318601D2b276ab8C78D087987a79cFA3442",
+        "0xE3D0cD9AC285f63164bB7E64079051DED0253573",
+        "0xF0Ac1e8660d045d332be4449a6D4eCaAe06Bdd90",
+        "0x7Af741c127af4EE06b303D1c5fE4bD5A6ca944De",
+        "0x7c657B4594c0547840c3F790AACcb23db8c07317",
+        "0x950822f9bbd037f0Ff2b19dde381bF2496A2ea98",
+        "0x987Eb4E0Bf5d73D9967800CD3601f406f519CFFb",
+        "0xaA36363Af814Ce8E5A26f937D663350228086DC0",
+        "0xa0E9f1d1755de064b055c9f9C01652B67DF618d1",
+        "0x5F52Ca3c16D383F19C802B2441BbF1bC781F54AA",
+        "0x3733ec1C376c46310A9DCad7B8F231b8EF0C1b02",
+        "0xF6e402C22849e820310C4691b8b5C30450730E61",
+        "0x7bEC3EB777300980d149Adf4f834cA2EA365632C",
+        "0x7f90e882b04878a7cE80DaAf52F35Ca020bC2930",
+        "0x3f1D8d4891067afd162387154db385572BC7f4b7",
+        "0x5B686C0CC34227c73e20039D6AE5DC9d9a885396",
+        "0x78d113f3005ca1C5469CE9D80c9f7a7A7cfCc91e",
+        "0x7E90e1907A7Ca165FF3bFb5676A2C287E929924F",
+        "0x8cE75f48EA4bfAAc0C5540dfdfdE0574e1B64Dec",
+        "0xB13d7C0FcDd3F07BB75E9FE981E8deb041f3E51b",
+        "0x857fef8809f0241e4e71a2C42c2142343d7AFE3F",
+        "0xE7C88fA0c43582e4053807CbA3F7d9DBE92f710b",
+        "0x63760D865Ce8b454aDE9174EBFAc3d09F074396B",
+        "0x2A306022ff6c2D88122A1c1FBF7c5ACEb6Fd723c",
+        "0x5B05BA8Ae320CcbE9A6F1A9d5890CEa047bb0627",
+        "0x6A1f5365d59F5ae4Af603d36eCD52F105BB99646",
+        "0xAE75ba2F203D7F4EE71B99025911219fCe22Ee5D",
+        "0xd9Fed0A2739032a750C3A6AE2c37095Be0841C27",
+        "0xE39038fc04Ae416EE9e8F8D63E9F2eaDb6500E48",
+        "0xb40Ea673BF57785C3Be68422b6B6B56fB5666c10",
+        "0x8eAcc98EB5d8751167e69c3AD42d8D9e28AEBE5c",
+        "0xAe66BAEf5ce9E8215Fca989d0025332392a6C4b5",
+        "0x7A64b52FaeC4EF22ef0F56eaF6baAD0F7f28861e",
+        "0x84C45C9aA1F8092FaD5F5197546522AFdb79c108",
+        "0xAb5D64d2D9Ad9eFFB6738B753fFb65C7bDe96310",
+        "0xd127770b0572D3De7dE6147205643bE174f9d45e",
+        "0xbe53AF250F999277c6A4BEAe291368250c76562D",
+        "0x82Cd05C73f6CcE677C4B330692dcE32B50B4C0Bb",
+        "0x29FBeEc862D09dA28A213Ae69666844662ebA3F8",
+        "0x35e46Ba5284e6623A183B9b56A2c9b3AADDdF641",
+        "0x24261f8A51C4124b2cBecF3bA94681Ee5650b39e",
+        "0xB081CB53A8cBc9d476e6648e0F703734Bf3a7A57",
+        "0xbC7E5dF244410f0736063ba4e3307e8f4a51D75D",
+        "0x2Fe9F4834E0EA67E59c8F55281197415b3619aB4",
+        "0x166336656530E44d4F83D79c0bE0AbEA411eE648",
+        "0x7DF0262497d380b65b3478a4da5D09EcD0b0978f",
+        "0x9A47951eFcd467eB235ddE45F3273bc727e4BA2d",
+        "0xa0266073c07E7405A01c11FEC0715ba923924eC6",
+        "0xd00165800aE6126B6198a816232039689A52A788",
+        "0x76b8418ADf1f2774636aC57D00C5551e44A484D9",
+        "0x6Bd6eA5e6C6606EE3B4f1BF4C556664f07Bd756f",
+        "0xD97E7b47c95764df5ddfe0B08c0F375Ce89dB36b",
+        "0x597f31cD8622ca08eb60D1969533208847dfa7B9",
+        "0x90CB14d2E2a3745b44E3d652ad027934fe46F991",
+        "0xb77F0aD60F2E5ed1a05a1855E482A42950639596",
+        "0xBC171D2a99f2543e4c664ddF010650ecc1c5f364",
+        "0x1529efC16244E8c1Ce36fB4A0B717E89A9137667",
+        "0x688eb2a9b7ebbb4Ba2c30D54AA4AE99E49b7E0EF",
+        "0x4200000000000000000000000000000000000011",
+        "0x549Dab0cD60171354101e4045C8039F93A712747",
+        "0x84b3E0bd767eaCD3f52ecd0223e614694f2edc41",
+        "0xd4E8E8e7D172c36477d69c6226273b511FF4DC63",
+        "0x3Fd2DE7440B00FB4748eA2449d2F0d3729621c80",
+        "0x5Bb27aB371590Ab5A43a054286D4BEB5BF9eBC9b",
+        "0x4d166CD24E802bec644C1784b1Fa1a7857AECE1b",
+        "0xBbbB7982CCa741BbdcF30F7fa33D53937A3DBE59"];
+
+// Set up provider and wallet
+const provider = new ethers.JsonRpcProvider(RPC_URL);
+const wallet = new ethers.Wallet(PRIVATE_KEY).connect(provider);
+const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, wallet);
+
+// Function to send tokens in batches
+async function sendTokens(startIndex) {
+    const startingNonce = await provider.getTransactionCount(wallet.address, "latest");
+    console.log(`Starting nonce: ${startingNonce}`);
+
+    let nonce = startingNonce;
+    const pendingTxs = [];
+
+    const recipientsToSend = RECIPIENT_LIST.slice(startIndex, startIndex + BATCH_SIZE);
+    console.log(`Processing recipients ${startIndex} to ${startIndex + BATCH_SIZE - 1}`);
+
+    for (let i = 0; i < recipientsToSend.length; i++) {
+        const recipient = recipientsToSend[i];
+        try {
+            console.log(`Preparing transaction for recipient ${recipient} (${i + 1})...`);
+            const tx = await tokenContract.transfer(recipient, AMOUNT, {
+                gasLimit: 3000000,
+                nonce: nonce++, // Use and increment nonce manually
+            });
+            console.log(`Transaction sent to ${recipient}: ${tx.hash}`);
+            pendingTxs.push(tx);
+        } catch (err) {
+            console.error(`Error preparing transaction for recipient ${recipient}:`, err);
+        }
+    }
+
+    // Wait for all transactions in the batch to be mined
+    const receipts = await Promise.all(
+        pendingTxs.map((tx) =>
+            tx
+                .wait()
+                .then((receipt) => {
+                    console.log(`Transaction mined: ${receipt.transactionHash}`);
+                    return receipt;
+                })
+                .catch((err) => {
+                    console.error(`Error waiting for transaction:`, err);
+                })
+        )
+    );
+
+    console.log(`Batch completed. ${receipts.length} transactions confirmed.`);
+}
+
+// Main loop for continuous batches
+(async () => {
+    let currentIndex = 0;
+    while (currentIndex < RECIPIENT_LIST.length) {
+        try {
+            console.log(`Starting new batch...`);
+            await sendTokens(currentIndex);
+            currentIndex += BATCH_SIZE;
+        } catch (err) {
+            console.error("Error during batch processing:", err);
+        }
+        // Optional delay between batches
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    console.log("All recipients processed!");
+})();
+```
