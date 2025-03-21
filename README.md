@@ -11,7 +11,7 @@ Following are some sample processes/scripts to get started on WMC, from minting 
 * [AUTO_MINT_BURN](./AUTO_MINT_BURN.md) - sequentially mint and burn tokens 
 * [AUTO_ERC20_TO_RANDOM_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to fabricated addresses
 * [AUTO_ERC20_TO_ALL_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to addresses with gas as at ~8th Feb 2025 
-* [TOOL-MAX_GAS_LIMIT](./TOOL-MAX_GAS_LIMIT.md) - what is max gas limit for a block?
+* [TOOL-GAS_CHECK](./TOOL-GAS_CHECK.md) - what stats can be found re gas rates?
 * [TOOL-RPC_CHECK](./TOOL-RPC_CHECK.md) - check status of RPC vs Base
 <br>
 
