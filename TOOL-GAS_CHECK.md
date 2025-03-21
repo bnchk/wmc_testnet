@@ -1,6 +1,100 @@
 # CHECK GAS INFO RETURNED BY RPC
 May not match what is happening, but is something
 
+## SAMPLE OUTPUT
+
+```
+==== WMC Testnet Gas Information ====
+
+Network: unknown (chainId: 42070)
+Current Block: 3786701
+Block Gas Limit: 30000000
+Block Gas Used: 43830
+Gas Utilization: 0.15%
+Base Fee Per Gas: 0.000000252 gwei
+Current Gas Price: 0.001000252 gwei
+
+==== Fee History (Last 10 blocks) ====
+Base Fee Per Gas (gwei):
+  Block -10: 0.000000252 gwei
+  Block -9: 0.000000252 gwei
+  Block -8: 0.000000252 gwei
+  Block -7: 0.000000252 gwei
+  Block -6: 0.000000252 gwei
+  Block -5: 0.000000252 gwei
+  Block -4: 0.000000252 gwei
+  Block -3: 0.000000252 gwei
+  Block -2: 0.000000252 gwei
+  Block -1: 0.000000252 gwei
+  Block -0: 0.000000252 gwei
+
+Priority Fee Percentiles (gwei):
+  Block -9:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -8:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -7:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -6:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -5:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -4:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -3:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -2:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -1:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+  Block -0:
+    25th percentile: 0.0 gwei
+    50th percentile: 0.0 gwei
+    75th percentile: 0.0 gwei
+
+==== EIP-1559 Fee Data ====
+Max Fee Per Gas: 0.001000504 gwei
+Max Priority Fee Per Gas: 0.001 gwei
+
+==== Gas Price Suggestions ====
+Slow: 0.000800201 gwei
+Average: 0.001000252 gwei
+Fast: 0.001200302 gwei
+Urgent: 0.001500378 gwei
+
+==== Gas Estimations ====
+Estimated gas for WMTX transfer: 21000
+Estimated cost for WMTX transfer: 0.000000021005292 WMTX
+
+Could not get pending transactions (txpool_content not supported)
+Pending Block Transaction Count: 1
+
+==== Gas Price Volatility ====
+Base Fee 1 hour ago: 0.000000252 gwei
+Current Base Fee: 0.000000252 gwei
+Change: 0.00%
+```
+
+## SCRIPT
+
 ```javascript
 // WMC Testnet Gas Query Script (ethers v6)
 // This script queries all available gas-related information from an WMC RPC endpoint
