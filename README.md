@@ -13,6 +13,7 @@ Following are some sample processes/scripts to get started on WMC, from minting 
 * [AUTO_ERC20_TO_ALL_ADDR](./AUTO_ERC20_TO_ALL_ADDR.md) - spam ERC20 to addresses with gas as at ~8th Feb 2025 
 * [TOOL-GAS_CHECK](./TOOL-GAS_CHECK.md) - what stats can be found re gas rates?
 * [TOOL-RPC_CHECK](./TOOL-RPC_CHECK.md) - check status of RPC vs Base
+* [TOOL-TX_CHECK.md](./TOOL-TX_CHECK.md) - check if tx hash is onchain
 <br>
 
 ## Automation Environment Setup steps - quick setup
